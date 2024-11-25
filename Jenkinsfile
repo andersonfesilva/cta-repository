@@ -3,7 +3,7 @@ pipeline {
     environment {
         // Define o caminho do Terraform e outras variáveis, se necessário
         TERRAFORM_DIR = 'terraform-code'
-        TERRAFORM_VERSION = '1.6.0'
+        TERRAFORM_VERSION = '1.8.0'
     }
     stages {
         stage('Install Terraform') {
