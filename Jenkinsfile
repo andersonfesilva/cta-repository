@@ -4,8 +4,16 @@ pipeline {
         // Define o caminho do Terraform e outras variáveis, se necessário
         TERRAFORM_DIR = 'terraform-code'
         TERRAFORM_VERSION = '1.8.0'
+        GCP_CREDENTIALS_JSON = credentials('gcp-credentials-json')
     }
     stages {
+        stage('Prepare Credentials') {
+            steps {
+                sh '''
+                echo "$GCP_CREDENTIALS_JSON" > $WORKSPACE/terraform-code/key-cta-user.json
+                '''
+            }
+        }
         stage('Install Terraform') {
             steps {
                 sh '''
