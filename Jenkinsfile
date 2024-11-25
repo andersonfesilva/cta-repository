@@ -11,10 +11,9 @@ pipeline {
                 sh '''
                 if ! [ -x "$(command -v terraform)" ]; then
                     curl -O https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-                    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-                    sudo mv terraform /usr/local/bin/
+                    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d ./terraform
                 fi
-                terraform --version
+                ./terraform/terraform --version
                 '''
             }
         }
@@ -25,7 +24,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Inicializar o Terraform
-                    sh 'terraform init'
+                    sh '../terraform/terraform init -no-color'
                 }
             }
         }
@@ -36,7 +35,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Gerar o plano do Terraform
-                    sh 'terraform plan -out=tfplan'
+                    sh '../terraform/terraform plan -out=tfplan -no-color'
                 }
             }
         }
@@ -47,7 +46,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Aplicar as mudanças
-                    sh 'terraform apply -auto-approve tfplan'
+                    sh '../terraform/terraform apply -auto-approve tfplan -no-color'
                 }
             }
         }
