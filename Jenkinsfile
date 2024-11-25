@@ -6,6 +6,7 @@ pipeline {
     }
     stages {
         stage('Prepare') {
+            checkout scm
             steps {
                 script {
                     echo "Preparando o ambiente..."
