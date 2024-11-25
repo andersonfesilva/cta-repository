@@ -4,7 +4,7 @@ pipeline {
         // Define o caminho do Terraform e outras variáveis, se necessário
         TERRAFORM_DIR = 'terraform-code'
         TERRAFORM_VERSION = '1.8.0'
-        GCP_CREDENTIALS_JSON = credentials('gcp-credentials-json')
+        GCP_CREDENTIALS_JSON = credentials('key-gcp')
     }
     stages {
         stage('Prepare Credentials') {
