@@ -3,16 +3,19 @@ pipeline {
     environment {
         // Define o caminho do Terraform e outras variáveis, se necessário
         TERRAFORM_DIR = 'terraform-code'
+        TERRAFORM_VERSION = '1.6.0'
     }
     stages {
-        stage('Prepare') {
-            
+        stage('Install Terraform') {
             steps {
-                script {
-                    echo "Preparando o ambiente..."
-                }
-                // Baixar ou configurar dependências necessárias
-                sh 'terraform --version'
+                sh '''
+                if ! [ -x "$(command -v terraform)" ]; then
+                    curl -O https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+                    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+                    sudo mv terraform /usr/local/bin/
+                fi
+                terraform --version
+                '''
             }
         }
         stage('Init') {
