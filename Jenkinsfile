@@ -55,6 +55,7 @@ pipeline {
         always {
             script {
                 echo "Limpando arquivos temporários..."
+                sh "rm -rf ./terraform"
             }
             dir("${env.TERRAFORM_DIR}") {
                 // Remover arquivos gerados
