@@ -43,7 +43,6 @@ pipeline {
                
                 // do something with the file, for instance 
                 script {
-                    cat $secretFile
                     echo "Inicializando Terraform..."
                 }
                 dir("${env.TERRAFORM_DIR}") {
