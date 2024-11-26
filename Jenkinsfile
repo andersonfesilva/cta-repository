@@ -7,6 +7,22 @@ pipeline {
         GCP_CREDENTIALS_JSON = credentials('gcp-access')
     }
     stages {
+        stage('Format JSON') {
+            steps {
+                script {
+                    // Caminho do arquivo JSON a ser formatado
+                    sh '''
+                    if ! command -v jq &> /dev/null; then
+                        echo "jq is not installed. Installing jq..."
+                        sudo apt-get update && sudo apt-get install -y jq
+                    fi
+                    
+                    jq . $WORKSPACE/terraform-code/key-cta-user.json > $WORKSPACE/terraform-code/key-cta-user.json
+                    echo "Formatted JSON saved to $WORKSPACE/terraform-code/key-cta-user.json"
+                    '''
+                }
+            }
+        }
         stage('Prepare Credentials') {
             steps {
                 sh '''
