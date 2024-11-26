@@ -36,7 +36,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Inicializar o Terraform
-                    sh '../terraform/terraform  init -no-color'
+                    sh '../terraform/terraform  init -reconfigure '
                 }
                
                 
