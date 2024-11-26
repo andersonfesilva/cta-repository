@@ -48,11 +48,12 @@ pipeline {
                 withCredentials([file(credentialsId: 'key-gcp', variable: 'secretFile')]) {
                     // do something with the file, for instance 
                     script {
+                        cat $secretFile
                         echo "Inicializando Terraform..."
                     }
                     dir("${env.TERRAFORM_DIR}") {
                         // Inicializar o Terraform
-                        sh '../terraform/terraform init -no-color'
+                        sh '../terraform/terraform  init -var="$secretFile" -no-color'
                     }
                 }
                 
