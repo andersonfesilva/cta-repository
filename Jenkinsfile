@@ -7,11 +7,11 @@ pipeline {
         GCP_CREDENTIALS_JSON = credentials('gcp-access')
     }
     stages {
-
         stage('Prepare Credentials') {
             steps {
                 sh '''
                 echo "$GCP_CREDENTIALS_JSON" > $WORKSPACE/terraform-code/key-cta-user.json
+                cat $WORKSPACE/terraform-code/key-cta-user.json | tr -s '\n' ' ' > $WORKSPACE/terraform-code/key-cta-user.json
                 export GOOGLE_APPLICATION_CREDENTIALS=$WORKSPACE/terraform-code/key-cta-user.json
                 '''
             }
