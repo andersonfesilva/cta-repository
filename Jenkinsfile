@@ -45,13 +45,17 @@ pipeline {
         }
         stage('Init') {
             steps {
-                script {
-                    echo "Inicializando Terraform..."
+                withCredentials([file(credentialsId: 'key-gcp', variable: 'secretFile')]) {
+                    // do something with the file, for instance 
+                    script {
+                        echo "Inicializando Terraform..."
+                    }
+                    dir("${env.TERRAFORM_DIR}") {
+                        // Inicializar o Terraform
+                        sh '../terraform/terraform init -no-color'
+                    }
                 }
-                dir("${env.TERRAFORM_DIR}") {
-                    // Inicializar o Terraform
-                    sh '../terraform/terraform init -no-color'
-                }
+                
             }
         }
         stage('Plan') {
