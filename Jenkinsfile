@@ -12,13 +12,8 @@ pipeline {
                 script {
                     // Caminho do arquivo JSON a ser formatado
                     sh '''
-                    if ! command -v jq &> /dev/null; then
-                        echo "jq is not installed. Installing jq..."
-                        curl -L -o $WORKSPACE/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-                
-                    fi
-                    chmod +x $WORKSPACE/jq
-                    $WORKSPACE/jq . $WORKSPACE/terraform-code/key-cta-user.json > $WORKSPACE/terraform-code/key-cta-user.json
+                    
+                    cat $WORKSPACE/terraform-code/key-cta-user.json | tr -s '\n' ' ' > $WORKSPACE/terraform-code/key-cta-user.json
                     echo "Formatted JSON saved to $WORKSPACE/terraform-code/key-cta-user.json"
                     '''
                 }
@@ -45,17 +40,17 @@ pipeline {
         }
         stage('Init') {
             steps {
-                withCredentials([file(credentialsId: 'key-gcp', variable: 'secretFile')]) {
-                    // do something with the file, for instance 
-                    script {
-                        cat $secretFile
-                        echo "Inicializando Terraform..."
-                    }
-                    dir("${env.TERRAFORM_DIR}") {
-                        // Inicializar o Terraform
-                        sh '../terraform/terraform  init -var="$secretFile" -no-color'
-                    }
+               
+                // do something with the file, for instance 
+                script {
+                    cat $secretFile
+                    echo "Inicializando Terraform..."
                 }
+                dir("${env.TERRAFORM_DIR}") {
+                    // Inicializar o Terraform
+                    sh '../terraform/terraform  init -no-color'
+                }
+               
                 
             }
         }
