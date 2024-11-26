@@ -7,18 +7,7 @@ pipeline {
         GCP_CREDENTIALS_JSON = credentials('gcp-access')
     }
     stages {
-        stage('Format JSON') {
-            steps {
-                script {
-                    // Caminho do arquivo JSON a ser formatado
-                    sh '''
-                    
-                    cat $WORKSPACE/terraform-code/key-cta-user.json | tr -s '\n' ' ' > $WORKSPACE/terraform-code/key-cta-user.json
-                    echo "Formatted JSON saved to $WORKSPACE/terraform-code/key-cta-user.json"
-                    '''
-                }
-            }
-        }
+
         stage('Prepare Credentials') {
             steps {
                 sh '''
