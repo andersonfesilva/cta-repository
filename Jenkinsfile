@@ -17,7 +17,7 @@ pipeline {
                         curl -L -o $WORKSPACE/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
                 
                     fi
-                    
+                    chmod +x $WORKSPACE/jq
                     $WORKSPACE/jq . $WORKSPACE/terraform-code/key-cta-user.json > $WORKSPACE/terraform-code/key-cta-user.json
                     echo "Formatted JSON saved to $WORKSPACE/terraform-code/key-cta-user.json"
                     '''
