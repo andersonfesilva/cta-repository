@@ -14,10 +14,11 @@ pipeline {
                     sh '''
                     if ! command -v jq &> /dev/null; then
                         echo "jq is not installed. Installing jq..."
-                        sudo apt-get update && sudo apt-get install -y jq
+                        curl -L -o ./jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+                
                     fi
                     
-                    jq . $WORKSPACE/terraform-code/key-cta-user.json > $WORKSPACE/terraform-code/key-cta-user.json
+                    ./jq . $WORKSPACE/terraform-code/key-cta-user.json > $WORKSPACE/terraform-code/key-cta-user.json
                     echo "Formatted JSON saved to $WORKSPACE/terraform-code/key-cta-user.json"
                     '''
                 }
