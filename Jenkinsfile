@@ -10,9 +10,8 @@ pipeline {
         stage('Prepare Credentials') {
             steps {
                 sh '''
-                echo "$GCP_CREDENTIALS_JSON" > $WORKSPACE/terraform-code/key-cta-user.json
-                cat $WORKSPACE/terraform-code/key-cta-user.json | tr -s '\n' ' ' > $WORKSPACE/terraform-code/key-cta-user.json
-                export GOOGLE_APPLICATION_CREDENTIALS=$WORKSPACE/terraform-code/key-cta-user.json
+                cd ./terraform-code
+                export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                 '''
             }
         }
@@ -36,7 +35,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Inicializar o Terraform
-                    sh '../terraform/terraform  init -reconfigure '
+                    sh '../terraform/terraform  init  -var="gcp_credentials_file=$GOOGLE_APPLICATION_CREDENTIALS"'
                 }
                
                 
@@ -49,7 +48,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Gerar o plano do Terraform
-                    sh '../terraform/terraform plan -var="GOOGLE_APPLICATION_CREDENTIALS=$WORKSPACE/terraform-code/key-cta-user.json" -out=tfplan -no-color'
+                    sh '../terraform/terraform plan -out=tfplan -no-color'
                 }
             }
         }
@@ -60,7 +59,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Aplicar as mudanças
-                    sh '../terraform/terraform apply -var="GOOGLE_APPLICATION_CREDENTIALS=$WORKSPACE/terraform-code/key-cta-user.json" -auto-approve tfplan -no-color'
+                    sh '../terraform/terraform apply -auto-approve tfplan -no-color'
                 }
             }
         }
