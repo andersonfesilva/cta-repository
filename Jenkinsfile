@@ -48,7 +48,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Gerar o plano do Terraform
-                    sh '../terraform/terraform plan -out=tfplan -no-color'
+                    sh '../terraform/terraform plan -out=tfplan -no-color -var="gcp_credentials_file=$GOOGLE_APPLICATION_CREDENTIALS"'
                 }
             }
         }
@@ -59,7 +59,7 @@ pipeline {
                 }
                 dir("${env.TERRAFORM_DIR}") {
                     // Aplicar as mudanças
-                    sh '../terraform/terraform apply -auto-approve tfplan -no-color'
+                    sh '../terraform/terraform apply -auto-approve tfplan -no-color -var="gcp_credentials_file=$GOOGLE_APPLICATION_CREDENTIALS"'
                 }
             }
         }
